@@ -137,7 +137,43 @@ export const PrivacyPage: Component = () => {
           </CardContent>
         </Card>
 
-        <div class="flex justify-center mt-8">
+        <Card>
+          <CardHeader>
+            <div class="flex items-center gap-2">
+              <div class="i-tabler-bug text-2xl text-primary"></div>
+              <h2 class="text-xl font-semibold">Security Vulnerability Reporting</h2>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p class="text-muted-foreground mb-4">
+              If you discover a security vulnerability in this application, we encourage you to report it responsibly.
+            </p>
+            <ul class="list-disc list-inside space-y-2 text-muted-foreground ml-4">
+              <li>
+                Email security issues to{' '}
+                <a href="mailto:security@twn.systems" class="text-primary hover:underline">
+                  security@twn.systems
+                </a>
+              </li>
+              <li>Do not publicly disclose the vulnerability before we have addressed it</li>
+              <li>
+                See our{' '}
+                <A href="/security" class="text-primary hover:underline">
+                  Security Policy
+                </A>
+                {' '}for detailed reporting guidelines
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <div class="flex justify-center gap-4 mt-8">
+          <Button as={A} href="/terms" variant="secondary">
+            Terms of Service
+          </Button>
+          <Button as={A} href="/security" variant="secondary">
+            Report Security Issue
+          </Button>
           <Button as={A} href="/" variant="secondary">
             <div class="i-tabler-arrow-left mr-2"></div>
             Back to Home

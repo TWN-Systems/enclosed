@@ -1,6 +1,8 @@
 import { A, type RouteDefinition } from '@solidjs/router';
 import { LoginPage } from './modules/auth/pages/login.page';
 import { getConfig } from './modules/config/config.provider';
+import { SecurityPage } from './modules/legal/pages/security.page';
+import { TermsPage } from './modules/legal/pages/terms.page';
 import { NOTE_ID_REGEX } from './modules/notes/notes.constants';
 import { buildViewNotePagePath } from './modules/notes/notes.models';
 import { CreateNotePage } from './modules/notes/pages/create-note.page';
@@ -26,6 +28,14 @@ export function getRoutes(): RouteDefinition[] {
         {
           path: '/privacy',
           component: PrivacyPage,
+        },
+        {
+          path: '/terms',
+          component: TermsPage,
+        },
+        {
+          path: '/security',
+          component: SecurityPage,
         },
         {
           path: viewNotePath,
