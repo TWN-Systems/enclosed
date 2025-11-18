@@ -216,15 +216,12 @@ export const Footer: Component = () => {
         <div>
           {t('footer.hosted-by')}
           {' '}
-          <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN Systems</Button>
+          <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN</Button>
           .
         </div>
       </div>
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm mb-3">
-        <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
-          TWN Systems
-        </Button>
         <Button variant="link" as="a" href="https://twn.it.com" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
           TWN IT
         </Button>
@@ -237,6 +234,9 @@ export const Footer: Component = () => {
       </div>
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
+        <Button variant="link" as={A} href="/privacy" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          Privacy & Security
+        </Button>
         <div>
           {t('footer.source-code')}
           {' '}
