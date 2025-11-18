@@ -182,6 +182,23 @@ export const Navbar: Component = () => {
                 {t('navbar.settings.report-bug')}
               </DropdownMenuItem>
 
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem as={A} href="/privacy" class="flex items-center gap-2 cursor-pointer">
+                <div class="i-tabler-shield-lock text-lg"></div>
+                Privacy & Security
+              </DropdownMenuItem>
+
+              <DropdownMenuItem as={A} href="/terms" class="flex items-center gap-2 cursor-pointer">
+                <div class="i-tabler-file-text text-lg"></div>
+                Terms of Service
+              </DropdownMenuItem>
+
+              <DropdownMenuItem as={A} href="/security" class="flex items-center gap-2 cursor-pointer">
+                <div class="i-tabler-alert-triangle text-lg"></div>
+                Report Security Issue
+              </DropdownMenuItem>
+
               {config.isAuthenticationRequired && authStore.getIsAuthenticated() && (
                 <>
                   <DropdownMenuSeparator />
@@ -235,7 +252,13 @@ export const Footer: Component = () => {
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
         <Button variant="link" as={A} href="/privacy" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
-          Privacy & Security
+          Privacy
+        </Button>
+        <Button variant="link" as={A} href="/terms" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          Terms
+        </Button>
+        <Button variant="link" as={A} href="/security" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          Report Issue
         </Button>
         <div>
           {t('footer.source-code')}
