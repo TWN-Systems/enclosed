@@ -35,7 +35,8 @@
     "crafted-by": "Được tạo bởi",
     "source-code": "Mã nguồn có sẵn trên",
     "github": "GitHub",
-    "version": "Phiên bản"
+    "version": "Phiên bản",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Đăng nhập Enclosed",

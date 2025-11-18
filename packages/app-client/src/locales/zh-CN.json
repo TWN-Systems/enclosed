@@ -35,7 +35,8 @@
     "crafted-by": "作者：",
     "source-code": "源代码：",
     "github": "GitHub",
-    "version": "版本"
+    "version": "版本",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "登录 Enclosed",
@@ -47,7 +48,10 @@
       "invalid-credentials": "无效的电子邮箱或密码。",
       "unknown": "发生未知错误，稍后再试。"
     },
-    "footer": ["没有账户？", "联系实例的拥有者。"]
+    "footer": [
+      "没有账户？",
+      "联系实例的拥有者。"
+    ]
   },
   "create": {
     "errors": {

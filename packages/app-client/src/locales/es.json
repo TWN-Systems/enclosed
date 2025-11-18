@@ -28,7 +28,8 @@
     "crafted-by": "Creado por",
     "source-code": "Código fuente disponible en",
     "github": "GitHub",
-    "version": "Versión"
+    "version": "Versión",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Iniciar sesión en Enclosed",

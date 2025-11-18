@@ -28,7 +28,8 @@
     "crafted-by": "Разработано",
     "source-code": "Исходный код здесь:",
     "github": "GitHub",
-    "version": "Версия"
+    "version": "Версия",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Войти в Enclosed",

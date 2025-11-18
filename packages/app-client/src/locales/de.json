@@ -30,7 +30,8 @@
     "crafted-by": "Geschaffen von",
     "source-code": "Quellcode verfügbar auf",
     "github": "GitHub",
-    "version": "Version"
+    "version": "Version",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "An Enclosed anmelden",

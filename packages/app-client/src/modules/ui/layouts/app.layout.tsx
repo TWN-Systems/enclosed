@@ -61,7 +61,7 @@ const LanguageSwitcher: Component = () => {
 
       <DropdownMenuSeparator />
 
-      <DropdownMenuItem as="a" class="flex items-center gap-2 cursor-pointer" target="_blank" rel="noopener noreferrer" href="https://github.com/CorentinTh/enclosed/tree/main/packages/app-client/src/locales">
+      <DropdownMenuItem as="a" class="flex items-center gap-2 cursor-pointer" target="_blank" rel="noopener noreferrer" href="https://github.com/TWN-Systems/enclosed/tree/twn-main/packages/app-client/src/locales">
         {t('navbar.settings.contribute-to-i18n')}
         <div class="i-tabler-external-link text-lg text-muted-foreground"></div>
       </DropdownMenuItem>
@@ -107,7 +107,7 @@ export const Navbar: Component = () => {
             </Button>
           )}
 
-          <Button variant="ghost" class="text-lg px-0 size-9 hidden md:inline-flex" as={A} href="https://github.com/CorentinTh/enclosed" target="_blank" rel="noopener noreferrer" aria-label={t('navbar.github-repository')}>
+          <Button variant="ghost" class="text-lg px-0 size-9 hidden md:inline-flex" as={A} href="https://github.com/TWN-Systems/enclosed" target="_blank" rel="noopener noreferrer" aria-label={t('navbar.github-repository')}>
             <div class="i-tabler-brand-github"></div>
           </Button>
 
@@ -139,7 +139,7 @@ export const Navbar: Component = () => {
             <DropdownMenuContent class="w-46">
 
               {/* Mobile only items */}
-              <DropdownMenuItem as="a" class="flex items-center gap-2 cursor-pointer md:hidden" target="_blank" href="https://github.com/CorentinTh/enclosed" rel="noopener noreferrer">
+              <DropdownMenuItem as="a" class="flex items-center gap-2 cursor-pointer md:hidden" target="_blank" href="https://github.com/TWN-Systems/enclosed" rel="noopener noreferrer">
                 <div class="i-tabler-brand-github text-lg"></div>
                 {t('navbar.github')}
               </DropdownMenuItem>
@@ -177,14 +177,9 @@ export const Navbar: Component = () => {
                 {t('navbar.settings.cli')}
               </DropdownMenuItem>
 
-              <DropdownMenuItem as="a" class="flex items-center gap-2 cursor-pointer" target="_blank" href="https://github.com/CorentinTh/enclosed/issues/new/choose" rel="noopener noreferrer">
+              <DropdownMenuItem as="a" class="flex items-center gap-2 cursor-pointer" target="_blank" href="https://github.com/TWN-Systems/enclosed/issues/new/choose" rel="noopener noreferrer">
                 <div class="i-tabler-bug text-lg"></div>
                 {t('navbar.settings.report-bug')}
-              </DropdownMenuItem>
-
-              <DropdownMenuItem as="a" class="flex items-center gap-2 cursor-pointer" target="_blank" href="https://buymeacoffee.com/cthmsst" rel="noopener noreferrer">
-                <div class="i-tabler-pig-money text-lg"></div>
-                {t('navbar.settings.support')}
               </DropdownMenuItem>
 
               {config.isAuthenticationRequired && authStore.getIsAuthenticated() && (
@@ -218,20 +213,23 @@ export const Footer: Component = () => {
         .
       </div>
       <div>
-        {t('footer.source-code')}
+        {t('footer.hosted-by')}
         {' '}
-        <Button variant="link" as="a" href="https://github.com/CorentinTh/enclosed" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">{t('footer.github')}</Button>
+        <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN Systems</Button>
         .
       </div>
-
+      <div>
+        {t('footer.source-code')}
+        {' '}
+        <Button variant="link" as="a" href="https://github.com/TWN-Systems/enclosed" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">{t('footer.github')}</Button>
+        .
+      </div>
       <div>
         {t('footer.version')}
         {' '}
-        <Button variant="link" as="a" href={`https://github.com/CorentinTh/enclosed/tree/v${buildTimeConfig.enclosedVersion}`} target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
-          v
+        <Button variant="link" as="a" href={`https://github.com/TWN-Systems/enclosed/tree/v${buildTimeConfig.enclosedVersion}`} target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
           {buildTimeConfig.enclosedVersion}
         </Button>
-
       </div>
     </div>
   );

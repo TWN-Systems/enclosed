@@ -30,7 +30,8 @@
     "crafted-by": "Gemaakt door",
     "source-code": "Broncode beschikbaar op",
     "github": "GitHub",
-    "version": "Versie"
+    "version": "Versie",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Inloggen op Enclosed",
