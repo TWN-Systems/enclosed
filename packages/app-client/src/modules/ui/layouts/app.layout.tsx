@@ -89,7 +89,8 @@ export const Navbar: Component = () => {
     <div class="border-b border-border bg-surface">
       <div class="flex items-center justify-between px-6 py-3 mx-auto max-w-1200px">
         <div class="flex items-baseline gap-4">
-          <Button variant="link" class="text-lg font-semibold border-b border-transparent hover:(no-underline !border-border) h-auto py-0 px-1 ml--1 rounded-none !transition-border-color-250" onClick={newNoteClicked}>
+          <Button variant="link" class="text-lg font-semibold border-b border-transparent hover:(no-underline !border-border) h-auto py-0 px-1 ml--1 rounded-none !transition-border-color-250 flex items-center gap-2" onClick={newNoteClicked}>
+            <img src="/twn-logo.png" alt="TWN" class="h-6 w-auto" />
             {t('app.title')}
           </Button>
 
@@ -184,6 +185,11 @@ export const Navbar: Component = () => {
 
               <DropdownMenuSeparator />
 
+              <DropdownMenuItem as={A} href="/about" class="flex items-center gap-2 cursor-pointer">
+                <div class="i-tabler-info-circle text-lg"></div>
+                About
+              </DropdownMenuItem>
+
               <DropdownMenuItem as={A} href="/privacy" class="flex items-center gap-2 cursor-pointer">
                 <div class="i-tabler-shield-lock text-lg"></div>
                 Privacy & Security
@@ -225,16 +231,9 @@ export const Footer: Component = () => {
     <div class="bg-surface border-t border-border py-6 px-6 text-center text-muted-foreground">
       <div class="flex flex-col sm:flex-row items-center justify-center gap-1 mb-4">
         <div>
-          {t('footer.crafted-by')}
-          {' '}
-          <Button variant="link" as="a" href="https://corentin.tech" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">Corentin Thomasset</Button>
-          .
-        </div>
-        <div>
           {t('footer.hosted-by')}
           {' '}
-          <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN</Button>
-          .
+          <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN Systems</Button>
         </div>
       </div>
 
@@ -251,6 +250,9 @@ export const Footer: Component = () => {
       </div>
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
+        <Button variant="link" as={A} href="/about" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          About
+        </Button>
         <Button variant="link" as={A} href="/privacy" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
           Privacy
         </Button>
