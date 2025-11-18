@@ -233,7 +233,7 @@ export const Footer: Component = () => {
         <div>
           {t('footer.hosted-by')}
           {' '}
-          <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN Systems</Button>
+          <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN</Button>
         </div>
       </div>
 

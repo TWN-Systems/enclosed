@@ -33,7 +33,7 @@
   },
   "footer": {
     "crafted-by": "Crafted by",
-    "hosted-by": "Hosted by",
+    "hosted-by": "Hosted with Cloudflare Pages + KV By",
     "source-code": "Source code available on",
     "github": "GitHub",
     "version": "Version"
