@@ -194,3 +194,5 @@ The [live instance](https://enclosed.cc) of Enclosed is hosted on [Cloudflare Pa
 ## Contact Information
 
 Please use the issue tracker on GitHub for any questions or feedback.
+\ n  
+ 

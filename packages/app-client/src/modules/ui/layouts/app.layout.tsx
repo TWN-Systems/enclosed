@@ -212,6 +212,13 @@ export const Footer: Component = () => {
         <Button variant="link" as="a" href="https://corentin.tech" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">Corentin Thomasset</Button>
         .
       </div>
+          <div class="bg-surface border-t border-border py-6 px-6 text-center text-muted-foreground flex flex-col sm:flex-row items-center justify-center gap-1">
+      <div>
+        {t('footer.hosted-by')}
+        {' '}
+        <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN Systems</Button>
+        .
+      </div>
       <div>
         {t('footer.hosted-by')}
         {' '}
