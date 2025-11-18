@@ -111,7 +111,7 @@ export const AboutPage: Component = () => {
           <CardHeader>
             <div class="flex items-center gap-2">
               <div class="i-tabler-building text-2xl text-primary"></div>
-              <h2 class="text-xl font-semibold">Hosted by TWN Systems</h2>
+              <h2 class="text-xl font-semibold">Hosted with Cloudflare Pages + KV By TWN</h2>
             </div>
           </CardHeader>
           <CardContent>
