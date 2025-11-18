@@ -1,8 +1,8 @@
 <p align="center">
 <picture>
-    <source srcset="./.github/icon-dark.png" media="(prefers-color-scheme: light)">
-    <source srcset="./.github/icon-light.png" media="(prefers-color-scheme: dark)">
-    <img src="./.github/icon-dark.png" alt="Header banner">
+    <source srcset="./packages/app-client/public/twn-logo.png" media="(prefers-color-scheme: light)">
+    <source srcset="./packages/app-client/public/twn-logo.png" media="(prefers-color-scheme: dark)">
+    <img src="./packages/app-client/public/twn-logo.png" alt="TWN Logo">
 </picture>
 </p>
 
@@ -194,3 +194,5 @@ The [live instance](https://enclosed.cc) of Enclosed is hosted on [Cloudflare Pa
 ## Contact Information
 
 Please use the issue tracker on GitHub for any questions or feedback.
+\ n  
+ 
