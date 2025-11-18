@@ -205,34 +205,51 @@ export const Footer: Component = () => {
   const { t } = useI18n();
 
   return (
-    <div class="bg-surface border-t border-border py-6 px-6 text-center text-muted-foreground flex flex-col sm:flex-row items-center justify-center gap-1">
-      <div>
-        {t('footer.crafted-by')}
-        {' '}
-        <Button variant="link" as="a" href="https://corentin.tech" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">Corentin Thomasset</Button>
-        .
-      </div>
-          <div class="bg-surface border-t border-border py-6 px-6 text-center text-muted-foreground flex flex-col sm:flex-row items-center justify-center gap-1">
-      <div>
-        {t('footer.hosted-by')}
-        {' '}
-        <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN Systems</Button>
-        .
-      </div>
-      <div>
-        {t('footer.source-code')}
-        {' '}
-        <Button variant="link" as="a" href="https://github.com/TWN-Systems/enclosed" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">{t('footer.github')}</Button>
-        .
+    <div class="bg-surface border-t border-border py-6 px-6 text-center text-muted-foreground">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-1 mb-4">
+        <div>
+          {t('footer.crafted-by')}
+          {' '}
+          <Button variant="link" as="a" href="https://corentin.tech" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">Corentin Thomasset</Button>
+          .
+        </div>
+        <div>
+          {t('footer.hosted-by')}
+          {' '}
+          <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN Systems</Button>
+          .
+        </div>
       </div>
 
-      <div>
-        {t('footer.version')}
-        {' '}
-        <Button variant="link" as="a" href={`https://github.com/TWN-Systems/enclosed/tree/v${buildTimeConfig.enclosedVersion}`} target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
-          {buildTimeConfig.enclosedVersion}
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm mb-3">
+        <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          TWN Systems
         </Button>
+        <Button variant="link" as="a" href="https://twn.it.com" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          TWN IT
+        </Button>
+        <Button variant="link" as="a" href="https://learning.twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          Learning Platform
+        </Button>
+        <Button variant="link" as="a" href="https://twn.trustshare.com" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          Trust Centre
+        </Button>
+      </div>
 
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
+        <div>
+          {t('footer.source-code')}
+          {' '}
+          <Button variant="link" as="a" href="https://github.com/TWN-Systems/enclosed" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">{t('footer.github')}</Button>
+          .
+        </div>
+        <div>
+          {t('footer.version')}
+          {' '}
+          <Button variant="link" as="a" href={`https://github.com/TWN-Systems/enclosed/tree/v${buildTimeConfig.enclosedVersion}`} target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+            {buildTimeConfig.enclosedVersion}
+          </Button>
+        </div>
       </div>
     </div>
   );

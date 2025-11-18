@@ -35,7 +35,8 @@
     "crafted-by": "Dibuat oleh",
     "source-code": "Kode sumber tersedia di",
     "github": "GitHub",
-    "version": "Versi"
+    "version": "Versi",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Masuk ke Enclosed",

@@ -30,7 +30,8 @@
     "crafted-by": "Criado por",
     "source-code": "Código disponível no",
     "github": "GitHub",
-    "version": "Versão"
+    "version": "Versão",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Entrar no Enclosed",

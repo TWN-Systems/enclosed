@@ -30,7 +30,8 @@
     "crafted-by": "Criado por",
     "source-code": "Código disponível no",
     "github": "GitHub",
-    "version": "Versão"
+    "version": "Versão",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Iniciar sessão no Enclosed",
@@ -42,7 +43,10 @@
       "invalid-credentials": "Email ou palavra-passe inválidos.",
       "unknown": "Ocorreu um erro. Tenta outra vez mais tarde."
     },
-    "footer": ["Não tens conta?", "Contacta o criador da instância."]
+    "footer": [
+      "Não tens conta?",
+      "Contacta o criador da instância."
+    ]
   },
   "create": {
     "errors": {

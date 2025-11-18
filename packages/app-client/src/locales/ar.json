@@ -30,7 +30,8 @@
     "crafted-by": "من صنع",
     "source-code": "الكود المصدري متاح على",
     "github": "GitHub",
-    "version": "الإصدار"
+    "version": "الإصدار",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "تسجيل الدخول",

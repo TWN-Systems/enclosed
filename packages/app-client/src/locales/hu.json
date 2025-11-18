@@ -30,7 +30,8 @@
     "crafted-by": "Készítette",
     "source-code": "Forráskód elérhető a",
     "github": "GitHubon",
-    "version": "Verzió"
+    "version": "Verzió",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Bejelentkezés az Enclosedba",

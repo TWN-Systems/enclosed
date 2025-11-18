@@ -35,7 +35,8 @@
     "crafted-by": "Creato da",
     "source-code": "Codice sorgente disponibile su",
     "github": "GitHub",
-    "version": "Versione"
+    "version": "Versione",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Accedi a Enclosed",
@@ -136,7 +137,6 @@
       "description": "Questa nota sarà cancellata dopo la lettura. Una volta visualizzata sarà definitivamente cancellata e non potrà essere recuperata.",
       "confirm": "Capisco, visualizza la nota"
     },
-
     "error": {
       "invalid-url": {
         "title": "URL della nota non valida",

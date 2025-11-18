@@ -35,7 +35,8 @@
     "crafted-by": "由",
     "source-code": "源碼可在",
     "github": "GitHub",
-    "version": "版本"
+    "version": "版本",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "登入 Enclosed",

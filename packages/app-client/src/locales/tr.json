@@ -35,7 +35,8 @@
     "crafted-by": "Hazırlayan",
     "source-code": "Kaynak kodu",
     "github": "GitHub",
-    "version": "Sürüm"
+    "version": "Sürüm",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Enclosed’a giriş yapın",
@@ -47,7 +48,10 @@
       "invalid-credentials": "Geçersiz e-posta veya şifre.",
       "unknown": "Bilinmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin."
     },
-    "footer": ["Hesabınız yok mu?", "Bu sistemin sahibine ulaşın."]
+    "footer": [
+      "Hesabınız yok mu?",
+      "Bu sistemin sahibine ulaşın."
+    ]
   },
   "create": {
     "errors": {

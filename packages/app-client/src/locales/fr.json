@@ -35,7 +35,8 @@
     "crafted-by": "Créé par",
     "source-code": "Code source disponible sur",
     "github": "GitHub",
-    "version": "Version"
+    "version": "Version",
+    "hosted-by": "Hosted by"
   },
   "login": {
     "title": "Connexion à Enclosed",
@@ -136,7 +137,6 @@
       "description": "Cette note sera supprimée après lecture. Une fois affichée, elle sera définitivement supprimée et ne pourra pas être récupérée.",
       "confirm": "Je comprends, montrer la note"
     },
-
     "error": {
       "invalid-url": {
         "title": "URL de note invalide",
