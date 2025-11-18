@@ -142,17 +142,36 @@ id = "b1329cb8560e49d392bed877c9ac48a2"
 
 Before the GitHub Action can deploy, you need to create the Pages project:
 
+> **⚠️ IMPORTANT**: Do NOT use Cloudflare's automatic Git builds! This monorepo requires a special build process that only GitHub Actions handles correctly. If you try to use Cloudflare's Git integration with automatic builds, you'll get errors about symlinks and missing files.
+
+#### Option A: Create via Wrangler CLI (Recommended)
+
+The easiest way is to create an empty Pages project using Wrangler:
+
+```bash
+# Install wrangler if you don't have it
+npm install -g wrangler
+
+# Login to Cloudflare
+wrangler login
+
+# Create an empty Pages project
+wrangler pages project create enclosed --production-branch main
+```
+
+This creates the project WITHOUT Git integration, which is perfect for GitHub Actions deployments.
+
+#### Option B: Create via Dashboard (Manual Setup)
+
+If you prefer using the dashboard:
+
 1. Go to **"Workers & Pages"** in Cloudflare dashboard
-2. Click **"Create application"** → **"Pages"**
-3. Click **"Connect to Git"**
-4. **Connect your GitHub account** if you haven't already
-5. Select your **forked `enclosed` repository**
-6. **Configure the build:**
-   - **Production branch**: `main`
-   - **Build command**: Leave empty (handled by GitHub Actions)
-   - **Build output directory**: Leave empty
-7. Click **"Save and Deploy"**
-8. **Cancel the initial build** - we'll deploy via GitHub Actions instead
+2. Click **"Create application"** → **"Pages"** → **"Upload assets"**
+3. **Project name**: `enclosed`
+4. You can upload any dummy file (we'll overwrite it with GitHub Actions)
+5. Click **"Save and Deploy"**
+
+**Do NOT use "Connect to Git"** - GitHub Actions will handle deployments.
 
 ### 4. Bind KV Namespace to Pages Project
 
@@ -365,6 +384,47 @@ PUBLIC_FALLBACK_DOCUMENTATION_URL=https://docs.yourdomain.com
 ---
 
 ## Troubleshooting
+
+### "build output directory contains links to files that can't be accessed"
+
+**This is the most common error!** It happens when you use Cloudflare Pages Git integration instead of GitHub Actions.
+
+**Symptoms:**
+```
+No wrangler.toml file found. Continuing.
+No build command specified. Skipping build step.
+Failed: build output directory contains links to files that can't be accessed
+```
+
+**Root Cause:** Cloudflare Pages is trying to build the monorepo directly, but can't handle the pnpm workspace symlinks.
+
+**Solution - Option 1: Switch to GitHub Actions (Recommended)**
+
+1. **Delete or pause the Git integration:**
+   - Go to your Pages project → **Settings** → **Builds & deployments**
+   - Under **Build configuration**, click **"Delete integration"** or **"Pause builds"**
+
+2. **Ensure GitHub Secrets are set:**
+   - Go to your GitHub repo → **Settings** → **Secrets and variables** → **Actions**
+   - Verify `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` exist
+
+3. **Trigger GitHub Actions deployment:**
+   - Push to the `main` branch (the workflow only runs on main)
+   - Or manually trigger: **Actions** tab → **CD - Production** → **Run workflow**
+
+**Solution - Option 2: Fix Cloudflare Pages Build Settings**
+
+If you want to keep Git integration:
+
+1. Go to **Settings** → **Builds & deployments** → **Configure build**
+2. Set these values:
+   ```
+   Build command: npx pnpm install && npx pnpm --filter @enclosed/deploy-cloudflare build
+   Build output directory: packages/deploy-cloudflare/dist
+   Root directory: (leave empty)
+   ```
+3. Add environment variable: `NODE_VERSION` = `22`
+4. **Save** and **Retry deployment**
 
 ### Deployment fails with "KV namespace not found"
 
