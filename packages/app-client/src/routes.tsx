@@ -5,6 +5,7 @@ import { NOTE_ID_REGEX } from './modules/notes/notes.constants';
 import { buildViewNotePagePath } from './modules/notes/notes.models';
 import { CreateNotePage } from './modules/notes/pages/create-note.page';
 import { ViewNotePage } from './modules/notes/pages/view-note.page';
+import { PrivacyPage } from './modules/privacy/pages/privacy.page';
 import { Button } from './modules/ui/components/button';
 import { AppLayout } from './modules/ui/layouts/app.layout';
 
@@ -21,6 +22,10 @@ export function getRoutes(): RouteDefinition[] {
         {
           path: '/',
           component: CreateNotePage,
+        },
+        {
+          path: '/privacy',
+          component: PrivacyPage,
         },
         {
           path: viewNotePath,
