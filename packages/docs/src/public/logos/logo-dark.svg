@@ -1,5 +1,19 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M138 395.864V333.22C138 320.76 142.95 308.809 151.761 299.998C160.572 291.187 172.522 286.237 184.983 286.237H263.288" stroke="black" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M216.305 333.22L263.288 286.237L216.305 239.254M294.61 113.966V176.61C294.61 180.764 296.26 184.747 299.197 187.684C302.134 190.621 306.118 192.271 310.271 192.271H372.915" stroke="black" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M153.661 239.254V145.288C153.661 136.981 156.961 129.014 162.835 123.14C168.709 117.266 176.676 113.966 184.983 113.966H294.61L372.915 192.271V364.542C372.915 372.849 369.615 380.816 363.741 386.69C357.867 392.564 349.9 395.864 341.593 395.864H192.813" stroke="black" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 3D Isometric House - Black version for light backgrounds -->
+  <g fill="none" stroke="black" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Front wall -->
+    <path d="M100 380 L100 220 L250 220 L250 380 Z" fill="black"/>
+    <!-- Side wall -->
+    <path d="M250 220 L250 380 L350 320 L350 160 Z" fill="black"/>
+    <!-- Roof front -->
+    <path d="M70 220 L175 100 L280 220 Z" fill="black"/>
+    <!-- Roof side -->
+    <path d="M280 220 L175 100 L380 160 L350 160 Z" fill="black"/>
+    <!-- Chimney -->
+    <rect x="100" y="80" width="40" height="70" fill="black"/>
+  </g>
+  <!-- Windows and door cutouts -->
+  <rect x="120" y="250" width="45" height="45" fill="white" stroke="black" stroke-width="8"/>
+  <rect x="185" y="250" width="45" height="45" fill="white" stroke="black" stroke-width="8"/>
+  <rect x="270" y="200" width="40" height="80" fill="white" stroke="black" stroke-width="8"/>
 </svg>

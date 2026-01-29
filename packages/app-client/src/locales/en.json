@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Enclosed",
+    "title": "TWN",
     "description": "Send private and secure notes"
   },
   "insecureContextWarning": {
@@ -23,23 +23,33 @@
       "system-mode": "System"
     },
     "settings": {
-      "documentation": "Documentation",
-      "cli": "Enclosed CLI",
-      "support": "Support Enclosed",
-      "report-bug": "Report a bug",
+      "twn-it": "TWN IT",
+      "learning-platform": "Learning Platform",
+      "trust-centre": "Trust Centre",
+      "about": "About",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "report-bug": "Report Issue",
       "logout": "Logout",
       "contribute-to-i18n": "Contribute to i18n"
     }
   },
   "footer": {
-    "crafted-by": "Crafted by",
+    "hosted-by": "Hosted with Cloudflare Pages + KV By TWN",
+    "twn-it": "TWN IT",
+    "learning-platform": "Learning Platform",
+    "trust-centre": "Trust Centre",
+    "about": "About",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "report-issue": "Report Issue",
     "source-code": "Source code available on",
     "github": "GitHub",
     "version": "Version"
   },
   "login": {
-    "title": "Login to Enclosed",
-    "description": "This is a private instance of Enclosed. Enter your credentials to be able to create notes.",
+    "title": "Login to TWN",
+    "description": "This is a private instance of TWN. Enter your credentials to be able to create notes.",
     "email": "Email",
     "password": "Password",
     "submit": "Login",
