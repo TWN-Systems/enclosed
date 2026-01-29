@@ -90,13 +90,9 @@ export const Navbar: Component = () => {
       <div class="flex items-center justify-between px-6 py-3 mx-auto max-w-1200px">
         <div class="flex items-baseline gap-4">
           <Button variant="link" class="text-lg font-semibold border-b border-transparent hover:(no-underline !border-border) h-auto py-0 px-1 ml--1 rounded-none !transition-border-color-250 flex items-center gap-2" onClick={newNoteClicked}>
-            <img src="/twn-logo.png" alt="TWN" class="h-6 w-auto" />
-            {t('app.title')}
+            <img src="/twn-logo.svg" alt="TWN" class="h-6 w-auto" />
+            TWN Enclosed
           </Button>
-
-          <span class="text-muted-foreground hidden sm:block">
-            {t('app.description')}
-          </span>
         </div>
 
         <div class="flex gap-2 items-center">
@@ -231,42 +227,47 @@ export const Footer: Component = () => {
     <div class="bg-surface border-t border-border py-6 px-6 text-center text-muted-foreground">
       <div class="flex flex-col sm:flex-row items-center justify-center gap-1 mb-4">
         <div>
-          {t('footer.hosted-by')}
+          Hosted with Cloudflare Pages + KV By
           {' '}
           <Button variant="link" as="a" href="https://twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">TWN</Button>
         </div>
       </div>
 
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm mb-3">
+      <div class="flex flex-wrap items-center justify-center gap-3 text-sm mb-3">
         <Button variant="link" as="a" href="https://twn.it.com" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
           TWN IT
         </Button>
+        <span class="text-muted-foreground">|</span>
         <Button variant="link" as="a" href="https://learning.twn.systems" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
           Learning Platform
         </Button>
+        <span class="text-muted-foreground">|</span>
         <Button variant="link" as="a" href="https://twn.trustshare.com" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
           Trust Centre
+        </Button>
+        <span class="text-muted-foreground">|</span>
+        <Button variant="link" as={A} href="/about" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          About
+        </Button>
+        <span class="text-muted-foreground">|</span>
+        <Button variant="link" as={A} href="/privacy" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          Privacy
+        </Button>
+        <span class="text-muted-foreground">|</span>
+        <Button variant="link" as={A} href="/terms" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          Terms
+        </Button>
+        <span class="text-muted-foreground">|</span>
+        <Button variant="link" as="a" href="https://github.com/TWN-Systems/enclosed/issues" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
+          Report Issue
         </Button>
       </div>
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
-        <Button variant="link" as={A} href="/about" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
-          About
-        </Button>
-        <Button variant="link" as={A} href="/privacy" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
-          Privacy
-        </Button>
-        <Button variant="link" as={A} href="/terms" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
-          Terms
-        </Button>
-        <Button variant="link" as={A} href="/security" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">
-          Report Issue
-        </Button>
         <div>
-          {t('footer.source-code')}
+          Source code available on
           {' '}
-          <Button variant="link" as="a" href="https://github.com/TWN-Systems/enclosed" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">{t('footer.github')}</Button>
-          .
+          <Button variant="link" as="a" href="https://github.com/TWN-Systems/enclosed" target="_blank" class="p-0 text-muted-foreground underline hover:text-primary transition font-normal h-auto">GitHub</Button>
         </div>
         <div>
           {t('footer.version')}
