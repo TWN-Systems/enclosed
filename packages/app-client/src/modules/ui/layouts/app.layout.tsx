@@ -7,6 +7,7 @@ import { useNoteContext } from '@/modules/notes/notes.context';
 import { cn } from '@/modules/shared/style/cn';
 import { useThemeStore } from '@/modules/theme/theme.store';
 import { Button } from '@/modules/ui/components/button';
+import { Logo } from '@/modules/ui/components/logo';
 import { DropdownMenu } from '@kobalte/core/dropdown-menu';
 
 import { A, useNavigate } from '@solidjs/router';
@@ -89,8 +90,8 @@ export const Navbar: Component = () => {
     <div class="border-b border-border bg-surface">
       <div class="flex items-center justify-between px-6 py-3 mx-auto max-w-1200px">
         <div class="flex items-baseline gap-4">
-          <Button variant="link" class="text-lg font-semibold border-b border-transparent hover:(no-underline !border-border) h-auto py-0 px-1 ml--1 rounded-none !transition-border-color-250" onClick={newNoteClicked}>
-            {t('app.title')}
+          <Button variant="link" class="text-lg font-semibold border-b border-transparent hover:(no-underline !border-border) h-auto py-0 px-1 ml--1 rounded-none !transition-border-color-250" onClick={newNoteClicked} aria-label={t('app.title')}>
+            <Logo class="h-6 w-auto" />
           </Button>
 
           <span class="text-muted-foreground hidden sm:block">
