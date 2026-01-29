@@ -97,6 +97,32 @@ export const PrivacyPage: Component = () => {
         <Card>
           <CardHeader>
             <div class="flex items-center gap-2">
+              <div class="i-tabler-chart-bar text-2xl text-primary"></div>
+              <h2 class="text-xl font-semibold">Analytics</h2>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p class="text-muted-foreground mb-4">
+              We use Umami, a privacy-focused, self-hosted analytics platform as an alternative to Google Analytics. This allows us to understand how the service is used while respecting your privacy.
+            </p>
+            <ul class="list-disc list-inside space-y-2 text-muted-foreground ml-4">
+              <li><strong>No cookies:</strong> We do not use cookies for analytics tracking</li>
+              <li><strong>Basic device info:</strong> Browser type, operating system, and screen size</li>
+              <li><strong>General location:</strong> Country and region level only (not precise location)</li>
+              <li><strong>Page views:</strong> Which pages are visited and how often</li>
+              <li><strong>Data storage:</strong> Analytics data is stored securely in Tasmania, Australia</li>
+              <li><strong>No third-party sharing:</strong> Analytics data is never sold or shared with third parties</li>
+              <li><strong>No personal data:</strong> We do not collect names, email addresses, or any personally identifiable information through analytics</li>
+            </ul>
+            <p class="text-muted-foreground mt-4">
+              By using this service, you consent to the collection of this basic analytics data. This helps us improve the service and understand usage patterns.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div class="flex items-center gap-2">
               <div class="i-tabler-code text-2xl text-primary"></div>
               <h2 class="text-xl font-semibold">Open Source</h2>
             </div>

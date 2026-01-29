@@ -155,6 +155,35 @@ export const TermsPage: Component = () => {
 
         <Card>
           <CardHeader>
+            <div class="flex items-center gap-2">
+              <div class="i-tabler-chart-bar text-2xl text-primary"></div>
+              <h2 class="text-xl font-semibold">Analytics Consent</h2>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p class="text-muted-foreground mb-4">
+              By using this service, you consent to the collection of basic analytics data. We use Umami, a privacy-focused, self-hosted analytics platform as an alternative to Google Analytics.
+            </p>
+            <ul class="list-disc list-inside space-y-2 text-muted-foreground ml-4">
+              <li>We collect basic device information (browser type, operating system, screen size)</li>
+              <li>We collect general location data (country/region level only)</li>
+              <li>We track page view counts to understand service usage</li>
+              <li>We do not use cookies for analytics tracking</li>
+              <li>Your analytics data is stored securely in Tasmania, Australia</li>
+              <li>Analytics data is never sold or shared with third parties</li>
+            </ul>
+            <p class="text-muted-foreground mt-4">
+              For more details about our analytics practices, please see our{' '}
+              <A href="/privacy" class="text-primary hover:underline">
+                Privacy & Security
+              </A>
+              {' '}page.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <h2 class="text-xl font-semibold">Service Availability</h2>
           </CardHeader>
           <CardContent>
