@@ -28,6 +28,16 @@
     "expiration"
   ],
   "devDependencies": {
-    "bumpp": "^9.5.2"
+    "bumpp": "^9.11.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "tar": ">=7.5.7",
+      "esbuild": ">=0.25.0",
+      "cross-spawn": ">=7.0.5",
+      "undici": ">=6.23.0",
+      "@eslint/plugin-kit": ">=0.3.4",
+      "tmp": ">=0.2.4"
+    }
   }
 }
