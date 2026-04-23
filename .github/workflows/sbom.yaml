@@ -38,7 +38,7 @@ jobs:
           ignore-scripts: "true"
 
       - name: Generate CycloneDX SBOM (Anchore)
-        uses: anchore/sbom-action@v0
+        uses: anchore/sbom-action@62ad5284b8ced813296287a0b63906cb364b73ee # v0.22.0
         with:
           path: .
           format: cyclonedx-json
@@ -46,7 +46,7 @@ jobs:
           artifact-name: sbom-source-cyclonedx
 
       - name: Generate SPDX SBOM (Anchore)
-        uses: anchore/sbom-action@v0
+        uses: anchore/sbom-action@62ad5284b8ced813296287a0b63906cb364b73ee # v0.22.0
         with:
           path: .
           format: spdx-json
@@ -101,7 +101,7 @@ jobs:
 
       - name: Generate CycloneDX SBOM for image
         if: steps.build.outcome == 'success'
-        uses: anchore/sbom-action@v0
+        uses: anchore/sbom-action@62ad5284b8ced813296287a0b63906cb364b73ee # v0.22.0
         with:
           image: ${{ matrix.dockerfile.tag }}
           format: cyclonedx-json
@@ -110,7 +110,7 @@ jobs:
 
       - name: Generate SPDX SBOM for image
         if: steps.build.outcome == 'success'
-        uses: anchore/sbom-action@v0
+        uses: anchore/sbom-action@62ad5284b8ced813296287a0b63906cb364b73ee # v0.22.0
         with:
           image: ${{ matrix.dockerfile.tag }}
           format: spdx-json

@@ -41,7 +41,7 @@ jobs:
 
       - name: Grype scan (source tree)
         id: grype
-        uses: anchore/scan-action@v4
+        uses: anchore/scan-action@abae793926ec39a78ab18002bc7fc45bbbd94342 # v6.0.0
         continue-on-error: true
         with:
           path: '.'
@@ -116,7 +116,7 @@ jobs:
 
       - name: Grype scan (image)
         id: grype-image
-        uses: anchore/scan-action@v4
+        uses: anchore/scan-action@abae793926ec39a78ab18002bc7fc45bbbd94342 # v6.0.0
         continue-on-error: true
         with:
           image: ${{ matrix.dockerfile.tag }}

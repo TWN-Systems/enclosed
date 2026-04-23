@@ -40,7 +40,7 @@ jobs:
             trivy-db-${{ runner.os }}-
 
       - name: Trivy FS scan (SARIF, all findings)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         continue-on-error: true
         with:
           scan-type: fs
@@ -75,7 +75,7 @@ jobs:
 
       - name: Trivy FS scan (table, surface HIGH/CRITICAL fixable)
         # informational until baseline is green; flip exit-code to '1' to enforce.
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         continue-on-error: true
         with:
           scan-type: fs
@@ -109,7 +109,7 @@ jobs:
             trivy-db-${{ runner.os }}-
 
       - name: Trivy config scan (SARIF)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         continue-on-error: true
         with:
           scan-type: config
@@ -183,7 +183,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Trivy image scan (SARIF)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         continue-on-error: true
         with:
           image-ref: ${{ matrix.dockerfile.tag }}
@@ -213,7 +213,7 @@ jobs:
 
       - name: Trivy image scan (table, surface HIGH/CRITICAL fixable)
         # informational until baseline is green; flip exit-code to '1' to enforce.
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         continue-on-error: true
         with:
           image-ref: ${{ matrix.dockerfile.tag }}
@@ -243,7 +243,7 @@ jobs:
           persist-credentials: false
 
       - name: Hadolint
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
         with:
           dockerfile: ${{ matrix.dockerfile }}
           format: sarif
