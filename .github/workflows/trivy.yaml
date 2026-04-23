@@ -53,12 +53,25 @@ jobs:
           exit-code: '0'
 
       - name: Upload Trivy FS SARIF
-        if: always() && hashFiles('trivy-fs.sarif') != ''
+        # Only upload on push/schedule so the first merge to main establishes
+        # the Code Scanning baseline. PRs get findings via job logs and an
+        # artifact, but do not trigger a delta comparison that would fail
+        # because the base branch has no prior baseline.
+        if: always() && github.event_name != 'pull_request' && hashFiles('trivy-fs.sarif') != ''
         continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-fs.sarif
           category: trivy-fs
+
+      - name: Upload Trivy FS SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && hashFiles('trivy-fs.sarif') != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-fs-sarif
+          path: trivy-fs.sarif
+          retention-days: 14
 
       - name: Trivy FS scan (table, surface HIGH/CRITICAL fixable)
         # informational until baseline is green; flip exit-code to '1' to enforce.
@@ -107,12 +120,21 @@ jobs:
           exit-code: '0'
 
       - name: Upload Trivy config SARIF
-        if: always() && hashFiles('trivy-config.sarif') != ''
+        if: always() && github.event_name != 'pull_request' && hashFiles('trivy-config.sarif') != ''
         continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-config.sarif
           category: trivy-config
+
+      - name: Upload Trivy config SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && hashFiles('trivy-config.sarif') != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-config-sarif
+          path: trivy-config.sarif
+          retention-days: 14
 
   trivy-image:
     name: Trivy - Container image
@@ -173,12 +195,21 @@ jobs:
           exit-code: '0'
 
       - name: Upload Trivy image SARIF
-        if: always() && hashFiles(format('trivy-image-{0}.sarif', matrix.dockerfile.file)) != ''
+        if: always() && github.event_name != 'pull_request' && hashFiles(format('trivy-image-{0}.sarif', matrix.dockerfile.file)) != ''
         continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-image-${{ matrix.dockerfile.file }}.sarif
           category: trivy-image-${{ matrix.dockerfile.file }}
+
+      - name: Upload Trivy image SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && hashFiles(format('trivy-image-{0}.sarif', matrix.dockerfile.file)) != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-image-${{ matrix.dockerfile.file }}-sarif
+          path: trivy-image-${{ matrix.dockerfile.file }}.sarif
+          retention-days: 14
 
       - name: Trivy image scan (table, surface HIGH/CRITICAL fixable)
         # informational until baseline is green; flip exit-code to '1' to enforce.
@@ -220,9 +251,18 @@ jobs:
           no-fail: true
 
       - name: Upload Hadolint SARIF
-        if: always() && hashFiles(format('hadolint-{0}.sarif', matrix.dockerfile)) != ''
+        if: always() && github.event_name != 'pull_request' && hashFiles(format('hadolint-{0}.sarif', matrix.dockerfile)) != ''
         continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: hadolint-${{ matrix.dockerfile }}.sarif
           category: hadolint-${{ matrix.dockerfile }}
+
+      - name: Upload Hadolint SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && hashFiles(format('hadolint-{0}.sarif', matrix.dockerfile)) != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: hadolint-${{ matrix.dockerfile }}-sarif
+          path: hadolint-${{ matrix.dockerfile }}.sarif
+          retention-days: 14

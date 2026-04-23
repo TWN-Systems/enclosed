@@ -52,7 +52,9 @@ jobs:
           || true
 
       - name: Upload SARIF to GitHub code scanning
-        if: always() && hashFiles('semgrep.sarif') != ''
+        # Only on push/schedule - PRs would fail the Code Scanning delta check
+        # against an empty main baseline. See trivy.yaml for rationale.
+        if: always() && github.event_name != 'pull_request' && hashFiles('semgrep.sarif') != ''
         continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:

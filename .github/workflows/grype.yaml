@@ -52,12 +52,21 @@ jobs:
           only-fixed: true
 
       - name: Upload Grype FS SARIF
-        if: always() && steps.grype.outputs.sarif != ''
+        if: always() && github.event_name != 'pull_request' && steps.grype.outputs.sarif != ''
         continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ steps.grype.outputs.sarif }}
           category: grype-fs
+
+      - name: Upload Grype FS SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && steps.grype.outputs.sarif != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: grype-fs-sarif
+          path: ${{ steps.grype.outputs.sarif }}
+          retention-days: 14
 
   grype-image:
     name: Grype - Container image
@@ -117,9 +126,18 @@ jobs:
           only-fixed: true
 
       - name: Upload Grype image SARIF
-        if: always() && steps.grype-image.outputs.sarif != ''
+        if: always() && github.event_name != 'pull_request' && steps.grype-image.outputs.sarif != ''
         continue-on-error: true
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ steps.grype-image.outputs.sarif }}
           category: grype-image-${{ matrix.dockerfile.file }}
+
+      - name: Upload Grype image SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && steps.grype-image.outputs.sarif != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: grype-image-${{ matrix.dockerfile.file }}-sarif
+          path: ${{ steps.grype-image.outputs.sarif }}
+          retention-days: 14
