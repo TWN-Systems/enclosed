@@ -33,8 +33,16 @@ runs:
     - name: Install dependencies
       if: inputs.install == 'true'
       shell: bash
+      # SECURITY: pass inputs through env rather than interpolating them
+      # into the shell body. Direct `${{ inputs.* }}` interpolation is a
+      # GHA command-injection vector even for composite actions (a caller
+      # workflow could pass a crafted value); env-var indirection is the
+      # standard mitigation.
+      env:
+        IGNORE_SCRIPTS: ${{ inputs.ignore-scripts }}
       run: |
-        if [ "${{ inputs.ignore-scripts }}" = "true" ]; then
+        set -euo pipefail
+        if [ "${IGNORE_SCRIPTS:-false}" = "true" ]; then
           pnpm install --frozen-lockfile --ignore-scripts
         else
           pnpm install --frozen-lockfile
