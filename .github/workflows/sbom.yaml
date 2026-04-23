@@ -2,11 +2,11 @@ name: Security - SBOM
 
 on:
   push:
-    branches: [main]
+    branches: [main, twn-main]
     tags:
       - 'v*.*.*'
   pull_request:
-    branches: [main]
+    branches: [main, twn-main]
   schedule:
     - cron: '11 7 * * 1'
   workflow_dispatch:

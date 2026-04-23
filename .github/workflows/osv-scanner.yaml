@@ -2,9 +2,9 @@ name: Security - OSV-Scanner & pnpm audit
 
 on:
   push:
-    branches: [main]
+    branches: [main, twn-main]
   pull_request:
-    branches: [main]
+    branches: [main, twn-main]
   schedule:
     - cron: '13 8 * * *'
   workflow_dispatch:

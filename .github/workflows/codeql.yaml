@@ -2,9 +2,9 @@ name: Security - CodeQL
 
 on:
   push:
-    branches: [main]
+    branches: [main, twn-main]
   pull_request:
-    branches: [main]
+    branches: [main, twn-main]
   schedule:
     # Weekly re-scan so advisories published after a merge still surface
     - cron: '17 4 * * 1'

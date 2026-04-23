@@ -2,9 +2,9 @@ name: Security - Trivy
 
 on:
   push:
-    branches: [main]
+    branches: [main, twn-main]
   pull_request:
-    branches: [main]
+    branches: [main, twn-main]
   schedule:
     - cron: '37 6 * * *'
   workflow_dispatch:

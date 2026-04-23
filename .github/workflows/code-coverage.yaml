@@ -2,9 +2,9 @@ name: CI - Code Coverage
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, twn-main]
   push:
-    branches: [main]
+    branches: [main, twn-main]
 
 permissions:
   contents: read

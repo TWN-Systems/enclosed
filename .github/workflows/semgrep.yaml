@@ -2,9 +2,9 @@ name: Security - Semgrep
 
 on:
   push:
-    branches: [main]
+    branches: [main, twn-main]
   pull_request:
-    branches: [main]
+    branches: [main, twn-main]
   schedule:
     - cron: '23 5 * * 1'
 
