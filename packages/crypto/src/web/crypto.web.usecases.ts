@@ -17,7 +17,7 @@ function bufferToBase64Url({ buffer }: { buffer: Uint8Array }): string {
   return base64Url;
 }
 
-function base64UrlToBuffer({ base64Url }: { base64Url: string }): Uint8Array {
+function base64UrlToBuffer({ base64Url }: { base64Url: string }): Uint8Array<ArrayBuffer> {
   const base64 = base64Url
     .padEnd(base64Url.length + (4 - base64Url.length % 4) % 4, '=')
     .replace(/-/g, '+')
@@ -28,7 +28,7 @@ function base64UrlToBuffer({ base64Url }: { base64Url: string }): Uint8Array {
   return buffer;
 }
 
-function createRandomBuffer({ length = 16 }: { length?: number } = {}): Uint8Array {
+function createRandomBuffer({ length = 16 }: { length?: number } = {}): Uint8Array<ArrayBuffer> {
   const randomValues = new Uint8Array(length);
   crypto.getRandomValues(randomValues);
 
@@ -48,7 +48,7 @@ async function deriveMasterKey({ baseKey, password = '' }: { baseKey: Uint8Array
   const derivedKey = await crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: baseKey,
+      salt: baseKey as Uint8Array<ArrayBuffer>,
       iterations: 100_000,
       hash: 'SHA-256',
     },

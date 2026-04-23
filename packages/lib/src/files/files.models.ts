@@ -28,7 +28,7 @@ async function noteAssetToFile({ noteAsset }: { noteAsset: NoteAsset }): Promise
 
   const fileName = get(noteAsset, 'metadata.name', 'file') as string;
   const fileType = get(noteAsset, 'metadata.fileType', 'application/octet-stream') as string;
-  return new File([noteAsset.content], fileName, { type: fileType });
+  return new File([noteAsset.content as Uint8Array<ArrayBuffer>], fileName, { type: fileType });
 }
 
 async function noteAssetsToFiles({ noteAssets }: { noteAssets: NoteAsset[] }): Promise<File[]> {

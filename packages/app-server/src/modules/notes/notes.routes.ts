@@ -105,9 +105,9 @@ function setupCreateNoteRoute({ app }: { app: ServerInstance }) {
       }),
     ),
 
-    async (context, next) => {
+    async (context) => {
       const config = context.get('config');
-      const { payload, isPublic, ttlInSeconds } = context.req.valid('json');
+      const { payload, ttlInSeconds, deleteAfterReading, encryptionAlgorithm, serializationFormat, isPublic } = context.req.valid('json');
 
       if (payload.length > config.notes.maxEncryptedPayloadLength) {
         throw createNotePayloadTooLargeError();
@@ -121,13 +121,7 @@ function setupCreateNoteRoute({ app }: { app: ServerInstance }) {
         throw createExpirationDelayRequiredError();
       }
 
-      await next();
-    },
-
-    async (context) => {
-      const { payload, ttlInSeconds, deleteAfterReading, encryptionAlgorithm, serializationFormat, isPublic } = context.req.valid('json');
       const storage = context.get('storage');
-
       const notesRepository = createNoteRepository({ storage });
 
       const { noteId } = await notesRepository.saveNote({ payload, ttlInSeconds, deleteAfterReading, encryptionAlgorithm, serializationFormat, isPublic });
