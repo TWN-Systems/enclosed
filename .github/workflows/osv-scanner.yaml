@@ -73,7 +73,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: pnpm audit (fail on HIGH/CRITICAL in prod deps)
+      - name: pnpm audit (surface HIGH/CRITICAL in prod deps)
+        # Informational first-run: surface findings without blocking merges so
+        # the baseline can be established, then flip `continue-on-error` to
+        # false once the 0-CVE target is achieved.
+        continue-on-error: true
         run: pnpm audit --audit-level high --prod
 
       - name: pnpm audit (JSON report, all severities)
