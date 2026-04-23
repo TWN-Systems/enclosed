@@ -1,7 +1,7 @@
+import type { Component } from 'solid-js';
 import { Button } from '@/modules/ui/components/button';
 import { Card, CardContent, CardHeader } from '@/modules/ui/components/card';
 import { A } from '@solidjs/router';
-import { type Component } from 'solid-js';
 
 export const SecurityPage: Component = () => {
   return (

@@ -43,12 +43,12 @@ async function deriveMasterKey({ baseKey, password = '' }: { baseKey: Uint8Array
   const passwordBuffer = new TextEncoder().encode(password);
   const mergedBuffers = new Uint8Array([...baseKey, ...passwordBuffer]);
 
-  const key = await crypto.subtle.importKey('raw', mergedBuffers, 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.importKey('raw', mergedBuffers as BufferSource, 'PBKDF2', false, ['deriveKey']);
 
   const derivedKey = await crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: baseKey,
+      salt: baseKey as BufferSource,
       iterations: 100_000,
       hash: 'SHA-256',
     },

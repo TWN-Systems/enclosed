@@ -1,7 +1,7 @@
+import type { Component } from 'solid-js';
 import { Button } from '@/modules/ui/components/button';
 import { Card, CardContent, CardHeader } from '@/modules/ui/components/card';
 import { A } from '@solidjs/router';
-import { type Component } from 'solid-js';
 
 export const TermsPage: Component = () => {
   return (
@@ -173,11 +173,13 @@ export const TermsPage: Component = () => {
               <li>Analytics data is never sold or shared with third parties</li>
             </ul>
             <p class="text-muted-foreground mt-4">
-              For more details about our analytics practices, please see our{' '}
+              For more details about our analytics practices, please see our
+              {' '}
               <A href="/privacy" class="text-primary hover:underline">
                 Privacy & Security
               </A>
-              {' '}page.
+              {' '}
+              page.
             </p>
           </CardContent>
         </Card>
@@ -221,18 +223,21 @@ export const TermsPage: Component = () => {
             </p>
             <ul class="list-disc list-inside space-y-2 text-muted-foreground ml-4">
               <li>
-                Email details to{' '}
+                Email details to
+                {' '}
                 <a href="mailto:security@twn.systems" class="text-primary hover:underline">
                   security@twn.systems
                 </a>
               </li>
               <li>Do not publicly disclose the vulnerability before we have addressed it</li>
               <li>
-                See our{' '}
+                See our
+                {' '}
                 <A href="/security" class="text-primary hover:underline">
                   Security Policy
                 </A>
-                {' '}for more information
+                {' '}
+                for more information
               </li>
             </ul>
           </CardContent>
@@ -255,7 +260,8 @@ export const TermsPage: Component = () => {
           </CardHeader>
           <CardContent>
             <p class="text-muted-foreground">
-              For questions about these terms, please visit our{' '}
+              For questions about these terms, please visit our
+              {' '}
               <a href="https://twn.systems" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
                 website
               </a>

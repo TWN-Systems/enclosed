@@ -1,7 +1,7 @@
+import type { Component } from 'solid-js';
 import { Button } from '@/modules/ui/components/button';
 import { Card, CardContent, CardHeader } from '@/modules/ui/components/card';
 import { A } from '@solidjs/router';
-import { type Component } from 'solid-js';
 
 export const PrivacyPage: Component = () => {
   return (
@@ -66,10 +66,26 @@ export const PrivacyPage: Component = () => {
               This instance is hosted using Cloudflare's infrastructure:
             </p>
             <ul class="list-disc list-inside space-y-2 text-muted-foreground ml-4">
-              <li><strong>Cloudflare Pages:</strong> Provides secure, fast, and reliable hosting for the application</li>
-              <li><strong>Cloudflare KV:</strong> Stores encrypted notes in a distributed key-value store</li>
-              <li><strong>Global CDN:</strong> Notes are served from edge locations close to you for optimal performance</li>
-              <li><strong>DDoS Protection:</strong> Built-in protection against attacks and abuse</li>
+              <li>
+                <strong>Cloudflare Pages:</strong>
+                {' '}
+                Provides secure, fast, and reliable hosting for the application
+              </li>
+              <li>
+                <strong>Cloudflare KV:</strong>
+                {' '}
+                Stores encrypted notes in a distributed key-value store
+              </li>
+              <li>
+                <strong>Global CDN:</strong>
+                {' '}
+                Notes are served from edge locations close to you for optimal performance
+              </li>
+              <li>
+                <strong>DDoS Protection:</strong>
+                {' '}
+                Built-in protection against attacks and abuse
+              </li>
             </ul>
           </CardContent>
         </Card>
@@ -106,13 +122,41 @@ export const PrivacyPage: Component = () => {
               We use Umami, a privacy-focused, self-hosted analytics platform as an alternative to Google Analytics. This allows us to understand how the service is used while respecting your privacy.
             </p>
             <ul class="list-disc list-inside space-y-2 text-muted-foreground ml-4">
-              <li><strong>No cookies:</strong> We do not use cookies for analytics tracking</li>
-              <li><strong>Basic device info:</strong> Browser type, operating system, and screen size</li>
-              <li><strong>General location:</strong> Country and region level only (not precise location)</li>
-              <li><strong>Page views:</strong> Which pages are visited and how often</li>
-              <li><strong>Data storage:</strong> Analytics data is stored securely in Tasmania, Australia</li>
-              <li><strong>No third-party sharing:</strong> Analytics data is never sold or shared with third parties</li>
-              <li><strong>No personal data:</strong> We do not collect names, email addresses, or any personally identifiable information through analytics</li>
+              <li>
+                <strong>No cookies:</strong>
+                {' '}
+                We do not use cookies for analytics tracking
+              </li>
+              <li>
+                <strong>Basic device info:</strong>
+                {' '}
+                Browser type, operating system, and screen size
+              </li>
+              <li>
+                <strong>General location:</strong>
+                {' '}
+                Country and region level only (not precise location)
+              </li>
+              <li>
+                <strong>Page views:</strong>
+                {' '}
+                Which pages are visited and how often
+              </li>
+              <li>
+                <strong>Data storage:</strong>
+                {' '}
+                Analytics data is stored securely in Tasmania, Australia
+              </li>
+              <li>
+                <strong>No third-party sharing:</strong>
+                {' '}
+                Analytics data is never sold or shared with third parties
+              </li>
+              <li>
+                <strong>No personal data:</strong>
+                {' '}
+                We do not collect names, email addresses, or any personally identifiable information through analytics
+              </li>
             </ul>
             <p class="text-muted-foreground mt-4">
               By using this service, you consent to the collection of this basic analytics data. This helps us improve the service and understand usage patterns.
@@ -136,7 +180,8 @@ export const PrivacyPage: Component = () => {
               <li>Security researchers can verify the encryption implementation</li>
               <li>The community can contribute improvements and report issues</li>
               <li>
-                View the source code on{' '}
+                View the source code on
+                {' '}
                 <a href="https://github.com/TWN-Systems/enclosed" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
                   GitHub
                 </a>
@@ -176,18 +221,21 @@ export const PrivacyPage: Component = () => {
             </p>
             <ul class="list-disc list-inside space-y-2 text-muted-foreground ml-4">
               <li>
-                Email security issues to{' '}
+                Email security issues to
+                {' '}
                 <a href="mailto:security@twn.systems" class="text-primary hover:underline">
                   security@twn.systems
                 </a>
               </li>
               <li>Do not publicly disclose the vulnerability before we have addressed it</li>
               <li>
-                See our{' '}
+                See our
+                {' '}
                 <A href="/security" class="text-primary hover:underline">
                   Security Policy
                 </A>
-                {' '}for detailed reporting guidelines
+                {' '}
+                for detailed reporting guidelines
               </li>
             </ul>
           </CardContent>

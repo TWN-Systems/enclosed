@@ -61,7 +61,11 @@ jobs:
           retention-days: 14
 
       - name: Upload coverage to Codecov
+        # Soft-fail: a missing CODECOV_TOKEN or a transient Codecov outage
+        # should not break CI - the coverage artifact above is always
+        # uploaded regardless.
         if: always() && hashFiles(format('{0}/coverage/lcov.info', matrix.pkg.dir)) != ''
+        continue-on-error: true
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

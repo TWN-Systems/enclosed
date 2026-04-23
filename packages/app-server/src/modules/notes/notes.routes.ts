@@ -107,6 +107,7 @@ function setupCreateNoteRoute({ app }: { app: ServerInstance }) {
 
     async (context, next) => {
       const config = context.get('config');
+      // @ts-expect-error Hono's valid('json') typing narrows into a non-callable union when the validator overloads conflict.
       const { payload, isPublic, ttlInSeconds } = context.req.valid('json');
 
       if (payload.length > config.notes.maxEncryptedPayloadLength) {

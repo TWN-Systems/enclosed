@@ -1,7 +1,7 @@
+import type { Component } from 'solid-js';
 import { Button } from '@/modules/ui/components/button';
 import { Card, CardContent, CardHeader } from '@/modules/ui/components/card';
 import { A } from '@solidjs/router';
-import { type Component } from 'solid-js';
 
 export const AboutPage: Component = () => {
   return (
@@ -98,11 +98,13 @@ export const AboutPage: Component = () => {
               <li>No one—not even we—can read your encrypted content</li>
             </ul>
             <p class="text-muted-foreground mt-4">
-              Learn more about our security architecture on our{' '}
+              Learn more about our security architecture on our
+              {' '}
               <A href="/privacy" class="text-primary hover:underline">
                 Privacy & Security
               </A>
-              {' '}page.
+              {' '}
+              page.
             </p>
           </CardContent>
         </Card>
@@ -116,7 +118,8 @@ export const AboutPage: Component = () => {
           </CardHeader>
           <CardContent>
             <p class="text-muted-foreground mb-4">
-              This instance is hosted and maintained by{' '}
+              This instance is hosted and maintained by
+              {' '}
               <a href="https://twn.systems" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
                 TWN Systems
               </a>
@@ -137,22 +140,26 @@ export const AboutPage: Component = () => {
           </CardHeader>
           <CardContent>
             <p class="text-muted-foreground mb-4">
-              This service is based on{' '}
+              This service is based on
+              {' '}
               <a href="https://github.com/CorentinTh/enclosed" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
                 Enclosed
               </a>
-              , an open-source project created by{' '}
+              , an open-source project created by
+              {' '}
               <a href="https://corentin.tech" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
                 Corentin Thomasset
               </a>
               . We're grateful for his work in creating a tool that prioritizes user privacy and security.
             </p>
             <p class="text-muted-foreground mb-4">
-              Our fork is available at{' '}
+              Our fork is available at
+              {' '}
               <a href="https://github.com/TWN-Systems/enclosed" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
                 github.com/TWN-Systems/enclosed
               </a>
-              {' '}where you can:
+              {' '}
+              where you can:
             </p>
             <ul class="list-disc list-inside space-y-2 text-muted-foreground ml-4">
               <li>Review the source code</li>
