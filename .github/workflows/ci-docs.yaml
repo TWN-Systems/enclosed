@@ -2,9 +2,23 @@ name: CI - Docs
 
 on:
   pull_request:
+    paths:
+      - 'packages/docs/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-docs.yaml'
+      - '.github/actions/pnpm-setup/**'
   push:
     branches:
       - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-docs-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   ci-docs:
@@ -16,18 +30,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'pnpm'
+          persist-credentials: false
 
-      - name: Install dependencies
-        run: pnpm i
-        working-directory: ./
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/pnpm-setup
 
       - name: Run linters
         run: pnpm lint

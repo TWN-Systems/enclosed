@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: sbom-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   sbom-source:
     name: SBOM - Source tree
@@ -25,17 +29,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'pnpm'
+          persist-credentials: false
 
-      - name: Install dependencies (for complete dep graph)
-        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/pnpm-setup
+        with:
+          ignore-scripts: "true"
 
       - name: Generate CycloneDX SBOM (Anchore)
         uses: anchore/sbom-action@v0
@@ -79,6 +79,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

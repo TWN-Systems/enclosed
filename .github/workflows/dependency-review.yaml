@@ -7,6 +7,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: dependency-review-${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   dependency-review:
     name: Dependency Review
@@ -19,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       # dependency-review-action requires GitHub Advanced Security on private
       # repos. Allow the step to soft-fail so the PR isn't blocked on

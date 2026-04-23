@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: osv-scanner-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   osv-scanner:
     name: OSV-Scanner
@@ -25,6 +29,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       - name: OSV-Scanner
         uses: google/osv-scanner-action/osv-scanner-action@v1.9.1
@@ -61,17 +67,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'pnpm'
+          persist-credentials: false
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/pnpm-setup
+        with:
+          ignore-scripts: "true"
 
       - name: pnpm audit (surface HIGH/CRITICAL in prod deps)
         # Informational first-run: surface findings without blocking merges so

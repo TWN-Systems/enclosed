@@ -2,9 +2,26 @@ name: CI - App Client E2E
 
 on:
   pull_request:
+    paths:
+      - 'packages/app-client/**'
+      - 'packages/app-server/**'
+      - 'packages/lib/**'
+      - 'packages/crypto/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ci-test-e2e.yml'
+      - '.github/actions/pnpm-setup/**'
   push:
     branches:
       - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-e2e-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   run-e2es:
@@ -16,23 +33,16 @@ jobs:
         working-directory: packages/app-client
 
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       with:
-        node-version: 22
-        cache: 'pnpm'
+        persist-credentials: false
+
+    - name: Setup Node + pnpm
+      uses: ./.github/actions/pnpm-setup
 
     - name: Get Playwright version
       id: playwright-version
       run: echo "PLAYWRIGHT_VERSION=$(pnpm list --json | jq -r .[0].devDependencies.\"@playwright/test\".version)" >> "$GITHUB_OUTPUT"
-
-    - name: Install dependencies
-      run: pnpm i
-      working-directory: ./
       
     - name: Build iso-prod app
       run: |

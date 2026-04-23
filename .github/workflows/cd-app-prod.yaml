@@ -5,6 +5,14 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
+concurrency:
+  # Never cancel production deploys mid-flight; serialize them instead.
+  group: cd-app-prod
+  cancel-in-progress: false
+
 jobs:
   publish-app-prod:
     runs-on: ubuntu-latest

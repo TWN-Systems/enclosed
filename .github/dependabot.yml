@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # Keep GitHub Actions pinned and up-to-date (npm deps are handled by Renovate).
+  # Keep GitHub Actions pinned and up-to-date.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -18,7 +18,7 @@ updates:
           - "minor"
           - "patch"
 
-  # Docker base images (node:22-slim / node:22-alpine)
+  # Docker base images (node:22-slim / node:22-alpine).
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
@@ -30,3 +30,75 @@ updates:
     commit-message:
       prefix: "chore(docker)"
       include: "scope"
+
+  # npm security-only updates across every workspace package.
+  # Renovate handles day-to-day version bumps; Dependabot's role here is to
+  # raise CVE fixes quickly (daily cadence) via GitHub's native security
+  # advisory integration. open-pull-requests-limit: 0 disables version PRs,
+  # so only vulnerability-driven PRs are created, avoiding overlap with
+  # Renovate.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "security"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/app-client"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "security"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/app-server"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "security"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/cli"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "security"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/crypto"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "security"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/lib"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "security"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/docs"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "security"

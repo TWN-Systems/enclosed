@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: trivy-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   trivy-fs:
     name: Trivy - Filesystem (deps & secrets)
@@ -24,6 +28,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Cache Trivy vuln DB
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/trivy
+          key: trivy-db-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            trivy-db-${{ runner.os }}-
 
       - name: Trivy FS scan (SARIF, all findings)
         uses: aquasecurity/trivy-action@master
@@ -69,6 +83,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Cache Trivy vuln DB
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/trivy
+          key: trivy-db-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            trivy-db-${{ runner.os }}-
 
       - name: Trivy config scan (SARIF)
         uses: aquasecurity/trivy-action@master
@@ -106,6 +130,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Cache Trivy vuln DB
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/trivy
+          key: trivy-db-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            trivy-db-${{ runner.os }}-
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -171,6 +205,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
 
       - name: Hadolint
         uses: hadolint/hadolint-action@v3.1.0
