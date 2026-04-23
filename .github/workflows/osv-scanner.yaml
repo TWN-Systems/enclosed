@@ -1,0 +1,89 @@
+name: Security - OSV-Scanner & pnpm audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '13 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  osv-scanner:
+    name: OSV-Scanner
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: OSV-Scanner
+        uses: google/osv-scanner-action/osv-scanner-action@v1.9.1
+        with:
+          scan-args: |-
+            --lockfile=./pnpm-lock.yaml
+            --format=sarif
+            --output=osv-scanner.sarif
+            --recursive
+        continue-on-error: true
+
+      - name: Upload OSV SARIF
+        if: always() && hashFiles('osv-scanner.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: osv-scanner.sarif
+          category: osv-scanner
+
+      - name: Upload OSV SARIF artifact
+        if: always() && hashFiles('osv-scanner.sarif') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: osv-scanner-sarif
+          path: osv-scanner.sarif
+          retention-days: 30
+
+  pnpm-audit:
+    name: pnpm audit (high & critical)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: pnpm audit (fail on HIGH/CRITICAL in prod deps)
+        run: pnpm audit --audit-level high --prod
+
+      - name: pnpm audit (JSON report, all severities)
+        if: always()
+        run: pnpm audit --json > pnpm-audit.json || true
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pnpm-audit-report
+          path: pnpm-audit.json
+          retention-days: 30

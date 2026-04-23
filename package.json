@@ -15,7 +15,10 @@
   "scripts": {
     "release": "bumpp --commit --tag --push --recursive",
     "docker:build": "docker build -t enclosed .",
-    "docker:run": "docker run -d -p 8788:8787 enclosed"
+    "docker:run": "docker run -d -p 8788:8787 enclosed",
+    "security:audit": "pnpm audit --audit-level high --prod",
+    "security:audit:all": "pnpm audit",
+    "security:outdated": "pnpm -r outdated"
   },
   "keywords": [
     "note",

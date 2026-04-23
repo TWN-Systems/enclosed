@@ -1,0 +1,93 @@
+name: Security - Grype
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '47 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  grype-fs:
+    name: Grype - Filesystem
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Grype scan (source tree)
+        id: grype
+        uses: anchore/scan-action@v4
+        with:
+          path: '.'
+          fail-build: true
+          severity-cutoff: high
+          output-format: sarif
+          only-fixed: true
+
+      - name: Upload Grype FS SARIF
+        if: always() && steps.grype.outputs.sarif != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.grype.outputs.sarif }}
+          category: grype-fs
+
+  grype-image:
+    name: Grype - Container image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        dockerfile:
+          - { file: Dockerfile, tag: enclosed:scan }
+          - { file: Dockerfile.rootless, tag: enclosed:scan-rootless }
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image (local, no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./${{ matrix.dockerfile.file }}
+          push: false
+          load: true
+          tags: ${{ matrix.dockerfile.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Grype scan (image)
+        id: grype-image
+        uses: anchore/scan-action@v4
+        with:
+          image: ${{ matrix.dockerfile.tag }}
+          fail-build: true
+          severity-cutoff: high
+          output-format: sarif
+          only-fixed: true
+
+      - name: Upload Grype image SARIF
+        if: always() && steps.grype-image.outputs.sarif != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.grype-image.outputs.sarif }}
+          category: grype-image-${{ matrix.dockerfile.file }}

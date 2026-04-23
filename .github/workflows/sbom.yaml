@@ -1,0 +1,120 @@
+name: Security - SBOM
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '11 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sbom-source:
+    name: SBOM - Source tree
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies (for complete dep graph)
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Generate CycloneDX SBOM (Anchore)
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: sbom.source.cyclonedx.json
+          artifact-name: sbom-source-cyclonedx
+
+      - name: Generate SPDX SBOM (Anchore)
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          output-file: sbom.source.spdx.json
+          artifact-name: sbom-source-spdx
+
+      - name: Upload SBOM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-source
+          path: |
+            sbom.source.cyclonedx.json
+            sbom.source.spdx.json
+          retention-days: 90
+
+  sbom-image:
+    name: SBOM - Container image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        dockerfile:
+          - { file: Dockerfile, tag: enclosed:sbom, slug: root }
+          - { file: Dockerfile.rootless, tag: enclosed:sbom-rootless, slug: rootless }
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image (local, no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./${{ matrix.dockerfile.file }}
+          push: false
+          load: true
+          tags: ${{ matrix.dockerfile.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Generate CycloneDX SBOM for image
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ matrix.dockerfile.tag }}
+          format: cyclonedx-json
+          output-file: sbom.image.${{ matrix.dockerfile.slug }}.cyclonedx.json
+          artifact-name: sbom-image-${{ matrix.dockerfile.slug }}-cyclonedx
+
+      - name: Generate SPDX SBOM for image
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ matrix.dockerfile.tag }}
+          format: spdx-json
+          output-file: sbom.image.${{ matrix.dockerfile.slug }}.spdx.json
+          artifact-name: sbom-image-${{ matrix.dockerfile.slug }}-spdx
+
+      - name: Upload SBOM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-image-${{ matrix.dockerfile.slug }}
+          path: |
+            sbom.image.${{ matrix.dockerfile.slug }}.cyclonedx.json
+            sbom.image.${{ matrix.dockerfile.slug }}.spdx.json
+          retention-days: 90

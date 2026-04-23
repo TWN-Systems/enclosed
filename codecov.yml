@@ -1,0 +1,35 @@
+codecov:
+  require_ci_to_pass: false
+  notify:
+    wait_for_ci: true
+
+coverage:
+  precision: 2
+  round: down
+  range: "60...90"
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        informational: true
+    patch:
+      default:
+        target: 70%
+        threshold: 5%
+        informational: true
+
+comment:
+  layout: "header, diff, flags, components, files"
+  behavior: default
+  require_changes: true
+
+ignore:
+  - "packages/docs/**"
+  - "packages/deploy-cloudflare/**"
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
+  - "**/*.e2e.test.ts"
+  - "**/dist/**"
+  - "**/dist-*/**"
+  - "**/node_modules/**"

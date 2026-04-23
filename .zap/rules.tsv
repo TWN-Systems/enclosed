@@ -1,0 +1,14 @@
+# ZAP baseline rule tuning for Enclosed.
+# Format: <rule id>\t<action: IGNORE|WARN|FAIL>\t<optional comment>
+# Reference: https://www.zaproxy.org/docs/docker/baseline-scan/
+
+# Static-asset false positives (SPA served by Hono):
+10020	IGNORE	X-Frame-Options header - mitigated via CSP frame-ancestors
+10021	IGNORE	X-Content-Type-Options - acceptable for static CDN assets
+
+# Cookie flags - enclosed does not use server-side cookies for auth (E2E encryption).
+10054	IGNORE	Cookie without SameSite attribute (n/a)
+10038	IGNORE	CSP wildcard (tuning; review via Semgrep/CodeQL)
+
+# Informational rules that are noise for a SPA
+10096	IGNORE	Timestamp disclosure (Unix) in JS bundles
