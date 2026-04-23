@@ -26,11 +26,13 @@ jobs:
       matrix:
         # Packages with @vitest/coverage-v8 installed. app-client lacks the
         # coverage provider (Playwright is used for e2e there) so is excluded.
+        # `slug` must be filesystem-safe for use in artifact names - no `@`
+        # or `/` chars, which actions/upload-artifact@v4 rejects.
         pkg:
-          - { name: "@enclosed/crypto",     dir: "packages/crypto" }
-          - { name: "@enclosed/lib",        dir: "packages/lib" }
-          - { name: "@enclosed/app-server", dir: "packages/app-server" }
-          - { name: "@enclosed/cli",        dir: "packages/cli" }
+          - { name: "@enclosed/crypto",     slug: "crypto",     dir: "packages/crypto" }
+          - { name: "@enclosed/lib",        slug: "lib",        dir: "packages/lib" }
+          - { name: "@enclosed/app-server", slug: "app-server", dir: "packages/app-server" }
+          - { name: "@enclosed/cli",        slug: "cli",        dir: "packages/cli" }
 
     steps:
       - name: Checkout
@@ -53,9 +55,10 @@ jobs:
 
       - name: Upload coverage artifact
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ matrix.pkg.name }}
+          name: coverage-${{ matrix.pkg.slug }}
           path: ${{ matrix.pkg.dir }}/coverage
           if-no-files-found: ignore
           retention-days: 14
@@ -70,7 +73,9 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{ matrix.pkg.dir }}/coverage/lcov.info
-          flags: ${{ matrix.pkg.name }}
-          name: ${{ matrix.pkg.name }}
+          # Codecov flags must match ^[\w\.\-]+$ - use the slug, not the
+          # @scoped package name.
+          flags: ${{ matrix.pkg.slug }}
+          name: ${{ matrix.pkg.slug }}
           fail_ci_if_error: false
           verbose: true
