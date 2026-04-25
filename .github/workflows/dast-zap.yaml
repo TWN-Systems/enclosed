@@ -1,0 +1,129 @@
+name: Security - DAST (OWASP ZAP)
+
+on:
+  schedule:
+    # Nightly against the running app built from main
+    - cron: '27 3 * * *'
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'Override target URL (defaults to local ephemeral container)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dast-zap
+  cancel-in-progress: false
+
+jobs:
+  zap-baseline:
+    name: OWASP ZAP baseline scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build enclosed image
+        if: ${{ github.event.inputs.target_url == '' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          load: true
+          tags: enclosed:dast
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Start enclosed container
+        if: ${{ github.event.inputs.target_url == '' }}
+        run: |
+          docker run -d --name enclosed-dast -p 8787:8787 enclosed:dast
+          # Wait for readiness (up to 60s)
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8787 >/dev/null 2>&1; then
+              echo "enclosed is up"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "enclosed failed to start" >&2
+          docker logs enclosed-dast || true
+          exit 1
+
+      - name: Resolve target URL
+        id: target
+        # SECURITY: pass the workflow_dispatch input through an env var rather
+        # than interpolating it directly into the shell script body. Direct
+        # `${{ github.event.inputs.* }}` interpolation in `run:` is a
+        # classic GHA command-injection vector (a user with write access
+        # could execute arbitrary shell on the runner by passing a
+        # malicious URL). Also validate the override strictly to prevent
+        # the ZAP scanner from becoming an SSRF primitive against cloud
+        # metadata endpoints or the runner's local network.
+        env:
+          OVERRIDE_URL: ${{ github.event.inputs.target_url }}
+        run: |
+          set -euo pipefail
+          if [ -z "${OVERRIDE_URL:-}" ]; then
+            printf 'url=%s\n' 'http://localhost:8787' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 1. Shape check - require plain http(s) URL, no backticks/$/;/\|/&/ /'/"/\r/\n.
+          if ! printf '%s' "$OVERRIDE_URL" | grep -Eq '^https?://[A-Za-z0-9._-]+(:[0-9]{1,5})?(/[A-Za-z0-9._~:/?#@!$&()*+,;=%[-]*)?$'; then
+            echo "::error::Rejected target_url: does not match allowed URL shape." >&2
+            exit 1
+          fi
+          # 2. Host allowlist - deny cloud metadata, link-local, RFC1918 leakage
+          # (except explicit localhost), and unqualified hostnames.
+          host=$(printf '%s' "$OVERRIDE_URL" | sed -E 's#^https?://([^/:]+).*#\1#')
+          case "$host" in
+            169.254.*|metadata.google.internal|metadata.azure.com|metadata.aws.amazon.com|100.100.100.200)
+              echo "::error::Rejected target_url: cloud metadata / link-local host." >&2
+              exit 1
+              ;;
+            10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.2[0-9].*|172.3[0-1].*|192.168.*)
+              echo "::error::Rejected target_url: RFC1918 private IP." >&2
+              exit 1
+              ;;
+            localhost|127.0.0.1|127.*)
+              # Loopback explicitly allowed - the default case is localhost:8787.
+              ;;
+            *.*)
+              # Public FQDN - allowed.
+              ;;
+            *)
+              echo "::error::Rejected target_url: unqualified host." >&2
+              exit 1
+              ;;
+          esac
+          printf 'url=%s\n' "$OVERRIDE_URL" >> "$GITHUB_OUTPUT"
+
+      - name: OWASP ZAP baseline scan
+        uses: zaproxy/action-baseline@7c4deb10e6261301961c86d65d54a516394f9aed # v0.14.0
+        with:
+          target: ${{ steps.target.outputs.url }}
+          rules_file_name: .zap/rules.tsv
+          cmd_options: '-a -j -T 10'
+          fail_action: false
+          allow_issue_writing: true
+
+      - name: Stop enclosed container
+        if: always() && github.event.inputs.target_url == ''
+        run: |
+          set -eu
+          docker logs enclosed-dast || true
+          docker rm -f enclosed-dast || true

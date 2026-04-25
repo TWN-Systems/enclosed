@@ -7,7 +7,7 @@ import {
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss';
-import presetAnimations from 'unocss-preset-animations';
+import { presetAnimations } from 'unocss-preset-animations';
 import { iconByFileType } from './src/modules/files/files.models';
 
 export default defineConfig({

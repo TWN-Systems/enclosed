@@ -1,0 +1,268 @@
+name: Security - Trivy
+
+on:
+  push:
+    branches: [main, twn-main]
+  pull_request:
+    branches: [main, twn-main]
+  schedule:
+    - cron: '37 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trivy-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  trivy-fs:
+    name: Trivy - Filesystem (deps & secrets)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Cache Trivy vuln DB
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/trivy
+          key: trivy-db-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            trivy-db-${{ runner.os }}-
+
+      - name: Trivy FS scan (SARIF, all findings)
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        continue-on-error: true
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,misconfig,license
+          severity: CRITICAL,HIGH,MEDIUM
+          ignore-unfixed: true
+          format: sarif
+          output: trivy-fs.sarif
+          exit-code: '0'
+
+      - name: Upload Trivy FS SARIF
+        # Only upload on push/schedule so the first merge to main establishes
+        # the Code Scanning baseline. PRs get findings via job logs and an
+        # artifact, but do not trigger a delta comparison that would fail
+        # because the base branch has no prior baseline.
+        if: always() && github.event_name != 'pull_request' && hashFiles('trivy-fs.sarif') != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-fs.sarif
+          category: trivy-fs
+
+      - name: Upload Trivy FS SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && hashFiles('trivy-fs.sarif') != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-fs-sarif
+          path: trivy-fs.sarif
+          retention-days: 14
+
+      - name: Trivy FS scan (table, surface HIGH/CRITICAL fixable)
+        # informational until baseline is green; flip exit-code to '1' to enforce.
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        continue-on-error: true
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          format: table
+          exit-code: '0'
+
+  trivy-config:
+    name: Trivy - IaC / Dockerfile misconfig
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Cache Trivy vuln DB
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/trivy
+          key: trivy-db-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            trivy-db-${{ runner.os }}-
+
+      - name: Trivy config scan (SARIF)
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        continue-on-error: true
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: CRITICAL,HIGH,MEDIUM
+          format: sarif
+          output: trivy-config.sarif
+          exit-code: '0'
+
+      - name: Upload Trivy config SARIF
+        if: always() && github.event_name != 'pull_request' && hashFiles('trivy-config.sarif') != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-config.sarif
+          category: trivy-config
+
+      - name: Upload Trivy config SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && hashFiles('trivy-config.sarif') != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-config-sarif
+          path: trivy-config.sarif
+          retention-days: 14
+
+  trivy-image:
+    name: Trivy - Container image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        dockerfile:
+          - { file: Dockerfile, tag: enclosed:scan }
+          - { file: Dockerfile.rootless, tag: enclosed:scan-rootless }
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Cache Trivy vuln DB
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/trivy
+          key: trivy-db-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            trivy-db-${{ runner.os }}-
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image (local, no push)
+        id: build
+        uses: docker/build-push-action@v6
+        continue-on-error: true
+        with:
+          context: .
+          file: ./${{ matrix.dockerfile.file }}
+          push: false
+          load: true
+          platforms: linux/amd64
+          tags: ${{ matrix.dockerfile.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Trivy image scan (SARIF)
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        continue-on-error: true
+        with:
+          image-ref: ${{ matrix.dockerfile.tag }}
+          scanners: vuln,secret
+          severity: CRITICAL,HIGH,MEDIUM
+          ignore-unfixed: true
+          format: sarif
+          output: trivy-image-${{ matrix.dockerfile.file }}.sarif
+          exit-code: '0'
+
+      - name: Upload Trivy image SARIF
+        if: always() && github.event_name != 'pull_request' && hashFiles(format('trivy-image-{0}.sarif', matrix.dockerfile.file)) != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-image-${{ matrix.dockerfile.file }}.sarif
+          category: trivy-image-${{ matrix.dockerfile.file }}
+
+      - name: Upload Trivy image SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && hashFiles(format('trivy-image-{0}.sarif', matrix.dockerfile.file)) != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-image-${{ matrix.dockerfile.file }}-sarif
+          path: trivy-image-${{ matrix.dockerfile.file }}.sarif
+          retention-days: 14
+
+      - name: Trivy image scan (table, surface HIGH/CRITICAL fixable)
+        # informational until baseline is green; flip exit-code to '1' to enforce.
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        continue-on-error: true
+        with:
+          image-ref: ${{ matrix.dockerfile.tag }}
+          scanners: vuln
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          format: table
+          exit-code: '0'
+
+  hadolint:
+    name: Hadolint - Dockerfile lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        dockerfile: [Dockerfile, Dockerfile.rootless]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Hadolint
+        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
+        with:
+          dockerfile: ${{ matrix.dockerfile }}
+          format: sarif
+          output-file: hadolint-${{ matrix.dockerfile }}.sarif
+          no-fail: true
+
+      - name: Upload Hadolint SARIF
+        if: always() && github.event_name != 'pull_request' && hashFiles(format('hadolint-{0}.sarif', matrix.dockerfile)) != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-${{ matrix.dockerfile }}.sarif
+          category: hadolint-${{ matrix.dockerfile }}
+
+      - name: Upload Hadolint SARIF artifact (PR)
+        if: always() && github.event_name == 'pull_request' && hashFiles(format('hadolint-{0}.sarif', matrix.dockerfile)) != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: hadolint-${{ matrix.dockerfile }}-sarif
+          path: hadolint-${{ matrix.dockerfile }}.sarif
+          retention-days: 14

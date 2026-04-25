@@ -1,0 +1,23 @@
+name: "Enclosed CodeQL config"
+
+# Use extended query suites for deeper coverage than the default
+queries:
+  - uses: security-extended
+  - uses: security-and-quality
+
+paths:
+  - packages
+
+paths-ignore:
+  - "**/node_modules"
+  - "**/dist"
+  - "**/dist-*"
+  - "**/.output"
+  - "**/.nuxt"
+  - "**/.nitro"
+  - "**/.wrangler"
+  - "**/coverage"
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
+  - "**/*.e2e.test.ts"
+  - "packages/docs"

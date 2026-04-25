@@ -1,0 +1,81 @@
+name: CI - Code Coverage
+
+on:
+  pull_request:
+    branches: [main, twn-main]
+  push:
+    branches: [main, twn-main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: code-coverage-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  coverage:
+    name: Coverage (${{ matrix.pkg.name }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Packages with @vitest/coverage-v8 installed. app-client lacks the
+        # coverage provider (Playwright is used for e2e there) so is excluded.
+        # `slug` must be filesystem-safe for use in artifact names - no `@`
+        # or `/` chars, which actions/upload-artifact@v4 rejects.
+        pkg:
+          - { name: "@enclosed/crypto",     slug: "crypto",     dir: "packages/crypto" }
+          - { name: "@enclosed/lib",        slug: "lib",        dir: "packages/lib" }
+          - { name: "@enclosed/app-server", slug: "app-server", dir: "packages/app-server" }
+          - { name: "@enclosed/cli",        slug: "cli",        dir: "packages/cli" }
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/pnpm-setup
+
+      - name: Run tests with coverage
+        continue-on-error: true
+        working-directory: ${{ matrix.pkg.dir }}
+        run: |
+          pnpm exec vitest run \
+            --coverage \
+            --coverage.reporter=text \
+            --coverage.reporter=lcov \
+            --coverage.reporter=json-summary
+
+      - name: Upload coverage artifact
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.pkg.slug }}
+          path: ${{ matrix.pkg.dir }}/coverage
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload coverage to Codecov
+        # Soft-fail: a missing CODECOV_TOKEN or a transient Codecov outage
+        # should not break CI - the coverage artifact above is always
+        # uploaded regardless.
+        if: always() && hashFiles(format('{0}/coverage/lcov.info', matrix.pkg.dir)) != ''
+        continue-on-error: true
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ${{ matrix.pkg.dir }}/coverage/lcov.info
+          # Codecov flags must match ^[\w\.\-]+$ - use the slug, not the
+          # @scoped package name.
+          flags: ${{ matrix.pkg.slug }}
+          name: ${{ matrix.pkg.slug }}
+          fail_ci_if_error: false
+          verbose: true

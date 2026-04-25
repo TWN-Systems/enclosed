@@ -1,0 +1,99 @@
+name: Security - OSV-Scanner & pnpm audit
+
+on:
+  push:
+    branches: [main, twn-main]
+  pull_request:
+    branches: [main, twn-main]
+  schedule:
+    - cron: '13 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: osv-scanner-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  osv-scanner:
+    name: OSV-Scanner
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: OSV-Scanner
+        uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5 # v2.3.5
+        with:
+          scan-args: |-
+            --lockfile=./pnpm-lock.yaml
+            --format=sarif
+            --output=osv-scanner.sarif
+            --recursive
+        continue-on-error: true
+
+      - name: Upload OSV SARIF
+        # Only on push/schedule; PRs would fail Code Scanning delta against
+        # an empty main baseline. The SARIF is still kept as an artifact
+        # below.
+        if: always() && github.event_name != 'pull_request' && hashFiles('osv-scanner.sarif') != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: osv-scanner.sarif
+          category: osv-scanner
+
+      - name: Upload OSV SARIF artifact
+        if: always() && hashFiles('osv-scanner.sarif') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: osv-scanner-sarif
+          path: osv-scanner.sarif
+          retention-days: 30
+
+  pnpm-audit:
+    name: pnpm audit (high & critical)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node + pnpm
+        uses: ./.github/actions/pnpm-setup
+        with:
+          ignore-scripts: "true"
+
+      - name: pnpm audit (surface HIGH/CRITICAL in prod deps)
+        # Informational first-run: surface findings without blocking merges so
+        # the baseline can be established, then flip `continue-on-error` to
+        # false once the 0-CVE target is achieved.
+        continue-on-error: true
+        run: pnpm audit --audit-level high --prod
+
+      - name: pnpm audit (JSON report, all severities)
+        if: always()
+        run: pnpm audit --json > pnpm-audit.json || true
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pnpm-audit-report
+          path: pnpm-audit.json
+          retention-days: 30

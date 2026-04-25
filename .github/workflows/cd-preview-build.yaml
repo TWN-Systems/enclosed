@@ -5,6 +5,13 @@ on:
     pull_request:
       types: [opened, synchronize]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-preview-build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-app-preview:
     runs-on: ubuntu-latest
