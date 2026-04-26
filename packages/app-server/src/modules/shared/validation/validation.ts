@@ -3,7 +3,7 @@ import type z from 'zod';
 import { validator } from 'hono/validator';
 
 function formatValidationError({ error }: { error: z.ZodError }) {
-  const details = (error.errors ?? []).map((e) => {
+  const details = (error.issues ?? []).map((e) => {
     return {
       ...(e.path.length === 0 ? {} : { path: e.path.join('.') }),
       message: e.message,
