@@ -1,9 +1,8 @@
 import path from 'node:path';
 import process from 'node:process';
 import unoCssPlugin from 'unocss/vite';
-import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
-import { configDefaults } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [
