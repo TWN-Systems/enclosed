@@ -35,7 +35,7 @@
     "date-fns": "^4.0.0",
     "figue": "^3.2.0",
     "hono": "^4.5.8",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "node-cron": "^3.0.3",
     "pino": "^9.3.2",
     "ulid-workers": "^2.1.0",
